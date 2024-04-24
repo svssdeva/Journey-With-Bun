@@ -20,6 +20,6 @@ localcount++;
 
 //export and import
 
-import { sum } from "./sum";
+import { sum } from "./calc";
 
 console.log(sum(1, 2));
