@@ -16,3 +16,10 @@ console.log("reloaded times: ", globalThis.count, "localcount: ", localcount);
 
 globalThis.count++;
 localcount++;
+
+
+//export and import
+
+import { sum } from "./sum";
+
+console.log(sum(1, 2));
