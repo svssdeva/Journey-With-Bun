@@ -6,10 +6,12 @@ export function sub(x: number, y: number): number {
     return x - y;
 }
 
-export function multiply(x: number, y: number): number {
+function multiply(x: number, y: number): number {
     return x * y;
 }
-
-export function divide(x: number, y: number): number {
+function divide(x: number, y: number): number {
     return x / y;
 }
+
+exports.multiply = multiply;
+exports.divide = divide;
