@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Form</title>
+</head>
+
+<body>
+    <h2>Simple Form</h2>
+    <form action='/data' method='post'>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+    <!-- <form>
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required><br><br>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required><br><br>
+
+    <input type="submit" value="Submit">
+</form> -->
+    <!-- <script>
+        function appendToURL(event) {
+            event.preventDefault(); // Prevent form submission
+
+            var name = document.getElementById("name").value;
+            var password = document.getElementById("password").value;
+
+            var url = window.location.href;
+            var queryParams = "?name=" + encodeURIComponent(name) + "&password=" + encodeURIComponent(password);
+
+            window.location.href = url + queryParams;
+        }
+    </script> -->
+</body>
+
+</html>
