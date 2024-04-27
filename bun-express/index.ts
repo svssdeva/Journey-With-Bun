@@ -1,5 +1,5 @@
 import express, { type Request, type Response } from "express";
-
+import userRoutes from './users';
 const app = express();
 
 const PORT = 2000;
@@ -28,6 +28,7 @@ app.get('/users/:userId/:userName', (req: Request, res: Response) => {
     res.end();
 });
 
+app.use('/users', userRoutes);
 
 
 
