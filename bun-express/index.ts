@@ -1,5 +1,6 @@
 import express, { type Request, type Response } from "express";
 import userRoutes from './users';
+import staticRouter from './staticRouter';
 const app = express();
 
 const PORT = 2000;
@@ -30,7 +31,7 @@ app.get('/users/:userId/:userName', (req: Request, res: Response) => {
 
 app.use('/users', userRoutes);
 
-
+app.use(staticRouter);
 
 app.listen(PORT, () => {
     console.log(`Listening on ${PORT}`);
