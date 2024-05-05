@@ -10,12 +10,28 @@ export class ProductDatabase {
             .catch(console.error);
     }
 
-    async init() {
-        return this.db.run('CREATE TABLE IF NOT EXISTS products (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, price INTEGER, image TEXT)')
+    addProduct(product: Product) {
+        return this.db.query(
+            `INSERT INTO products(name, price, image) VALUES(?,?,?) RETURNING id`
+        ).get(product.name, product.price, product.image) as Product;
     }
 
-    addProduct(product: Product) {
-        return this.db.query('INSERT INTO products (name, price, image) VALUES (?, ?, ?) RETURNING id').get(product.name, product.price, product.image) as Promise<Product>;
+    async init() {
+        return this.db.run(
+            'CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, price NUM, image TEXT)'
+        )
+    }
+
+    fetchProducts() {
+        return this.db.query('SELECT * FROM products').all();
+    }
+
+    updateProduct(id: number, product: Product) {
+        return this.db.run(`UPDATE products SET name = ${product.name}, price = ${product.name}, image = ${product.name} WHERE id = ${id}`);
+    }
+
+    deleteProduct(id: number) {
+        return this.db.run(`DELETE FROM products WHERE id = ${id}`);
     }
 }
 
