@@ -11,12 +11,10 @@
     <h1> Chat Application</h1>
     <script>
         const ws = new WebSocket('ws://localhost:8080');
-        ws.addEventListener('open', () => {
-            console.log('connected');
-        });
+
         ws.addEventListener('message', (event) => {
-            const clientId = event.data;
-            console.log(clientId);
+            const message = event.data;
+            console.log(message);
         });
     </script>
 </body>
