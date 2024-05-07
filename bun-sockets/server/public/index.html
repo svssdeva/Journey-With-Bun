@@ -5,18 +5,66 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BUN + WS</title>
+
 </head>
 
 <body>
-    <h1> Chat Application</h1>
+    <form action="">
+        <h1> Chat Application</h1>
+        <input type="text" class='inputMsg' placeholder='Enter Message' id='msg'>
+        <button type='submit' id='send'>Send</button>
+    </form>
+    <div id='users-container'></div>
+    <div id='msg-container'></div>
+
     <script>
         const ws = new WebSocket('ws://localhost:8080');
+        const btn = document.getElementById('send');
+        const msg = document.getElementById('msg');
 
+        btn.addEventListener('click', () => {
+            const msgTemplate = document.getElementById('msg-template');
+            const msgContainer = document.getElementById('msg-container');
+            const html = ejs.render(msgTemplate.innerHTML, { msg: msg.value });
+            msgContainer.insertAdjacentHTML('beforeend', html);
+            ws.send(msg.value);
+            msg.value = '';
+            msg.focus();
+            event.preventDefault();
+        })
         ws.addEventListener('message', (event) => {
             const message = event.data;
+            try {
+                const users = JSON.parse(message);
+                if (Array.isArray(users)) {
+                    const userListTemplate = document.getElementById('usersList-template');
+                    const usersContainer = document.getElementById('users-container');
+                    const html = ejs.render(userListTemplate.innerHTML, { users });
+                    usersContainer.innerHTML = html;
+                    return;
+                }
+            } catch (error) {
+                console.error(error);
+                console.log(message);
+
+            }
             console.log(message);
         });
     </script>
 </body>
+<script type='text/html' id='usersList-template'>
+ <ul>
+    <% for const user of users { %>
+        <li><%= user %></li>
+    <% } %>
+    
+ </ul>   
+</script>
+<script type='text/html' id='msg-template'>
+ <div>
+    <p><%= msg %></p>
+ </div>   
+</script>
+<script src="https://cdn.jsdelivr.net/npm/ejs@3.1.10/ejs.min.js"></script>
 
 </html>
