@@ -50,16 +50,21 @@ app.get('/', (req, res) => {
 //         ` `
 //     );
 // });
+// app.post('/note', (req, res) => {
+//     const noteData = req.body.note;
+//     HTMX_KNOWLEDGE.unshift(noteData);
+//     res.redirect('/');
+// });
 app.post('/note', (req, res) => {
     const noteData = req.body.note;
     HTMX_KNOWLEDGE.unshift(noteData);
-    res.redirect('/');
-    // res.send(`
-    // <ul>
-    //     ${HTMX_KNOWLEDGE.map(info => `<li>${info}</li>`).join('')}
-    //     </ul>
-    // `)
+    res.send(`
+    <ul>
+        ${HTMX_KNOWLEDGE.map(info => `<li>${info}</li>`).join('')}
+        </ul>
+    `)
 })
+
 
 app.listen(3000);
 console.log('Listening on http://localhost:3000');
