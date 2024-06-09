@@ -3,11 +3,11 @@ import express from 'express';
 const courseGoals: any = [];
 
 function renderGoals(goal: any) {
-    return `<li id="goal-${goal.id}">
+    return `<li>
               <span>${goal.text}</span>
               <button
                hx-delete="/goals/${goal.id}"
-                hx-target="#goal-${goal.id}"
+                hx-target="closest li"
                 >Remove</button>
             </li>`
 }
@@ -35,8 +35,10 @@ app.get('/', (req: any, res: any) => {
           <form 
             id="goal-form" 
             hx-post="/goals" 
-            hx-target="this"
-            hx-swap="beforeend">
+            hx-target="#goals"
+            hx-swap="beforeend"
+            hx-on::after-request="this.reset()"
+            hx-disabled-elt="form button">
             <div>
               <label htmlFor="goal">Goal</label>
               <input type="text" id="goal" name="goal" />
@@ -45,7 +47,7 @@ app.get('/', (req: any, res: any) => {
           </form>
         </section>
         <section>
-          <ul id="goals" hx-swap="outerHTML">
+          <ul id="goals" hx-swap="outerHTML" hx-confirm="Are you sure ?">
           ${courseGoals.map(
         (goal: any) => renderGoals(goal)).join('')}
           </ul>
