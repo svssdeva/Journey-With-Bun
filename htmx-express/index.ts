@@ -4,7 +4,7 @@ const app = express();
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: false }));
 app.get('/', (req, res) => {
-    res.send(`
+  res.send(`
     <!DOCTYPE html>
     <html>
       <head>
@@ -56,9 +56,9 @@ app.get('/', (req, res) => {
 //     res.redirect('/');
 // });
 app.post('/note', (req, res) => {
-    const noteData = req.body.note;
-    HTMX_KNOWLEDGE.unshift(noteData);
-    res.send(`
+  const noteData = req.body.note;
+  HTMX_KNOWLEDGE.unshift(noteData);
+  res.send(`
     <ul>
         ${HTMX_KNOWLEDGE.map(info => `<li>${info}</li>`).join('')}
         </ul>
