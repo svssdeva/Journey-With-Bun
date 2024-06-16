@@ -4,13 +4,14 @@ export default function renderLocation(location: any, isAvailableLocation: boole
     attributes = `  hx-post="/places"
        hx-vals='{"locationId": "${location.id}"}'
        hx-target="#interesting-locations"
-       hx-swap="beforeend show:#interesting-locations-section:top"`;
+       hx-swap="beforeend show:#interesting-locations-section:top"
+       data-action="add"`;
   } else {
-    attributes = ` hx-delete="/places/${location.id}"
-     hx-vals='{"locationId": "${location.id}"}'
+    attributes = ` 
+      hx-delete="/places/${location.id}"
       hx-target="closest li" 
       hx-swap="outerHTML"
-      hx-confirm="Are you sure?"`;
+       data-action="remove"`;
   }
   return `
     <li class="location-item">
