@@ -1,8 +1,10 @@
 function showModalConfiramtion(event) {
-    event.preventDefault();
-    console.log(event);
-    const action = event.detail.elt.dataset.action;
-    const confirmationModal = `
+  if (event.detail.path === '/suggested-locations') {
+    return;
+  }
+  event.preventDefault();
+  const action = event.detail.elt.dataset.action;
+  const confirmationModal = `
   <dialog class="modal">
     <div id="confirmation">
       <h2>Are you sure?</h2>
@@ -18,20 +20,20 @@ function showModalConfiramtion(event) {
     </div>
   </dialog>
 `;
-    document.body.insertAdjacentHTML('beforeend', confirmationModal);
-    const dialog = document.querySelector('dialog');
+  document.body.insertAdjacentHTML('beforeend', confirmationModal);
+  const dialog = document.querySelector('dialog');
 
-    const noBtn = document.getElementById('action-no');
-    const yesBtn = document.getElementById('action-yes');
-    noBtn.addEventListener('click', () => {
-        dialog.remove();
-    });
+  const noBtn = document.getElementById('action-no');
+  const yesBtn = document.getElementById('action-yes');
+  noBtn.addEventListener('click', () => {
+    dialog.remove();
+  });
 
-    yesBtn.addEventListener('click', () => {
-        event.detail.issueRequest();
-        dialog.remove();
-    });
-    dialog.showModal();
+  yesBtn.addEventListener('click', () => {
+    event.detail.issueRequest();
+    dialog.remove();
+  });
+  dialog.showModal();
 }
 
 document.addEventListener('htmx:confirm', showModalConfiramtion)
