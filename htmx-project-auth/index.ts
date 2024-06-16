@@ -5,8 +5,8 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static('public'));
 
-app.get('/', (req, res) => {
-    res.send(`
+app.get('/', (req: any, res: any) => {
+  res.send(`
     <!DOCTYPE html>
     <html lang="en">
       <head>
@@ -22,18 +22,21 @@ app.get('/', (req, res) => {
         />
         <link rel="stylesheet" href="/main.css" />
         <script src="https://unpkg.com/htmx.org@1.9.12" integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2" crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/htmx.org@1.9.12/dist/ext/response-targets.js"></script>
       </head>
       <body>
         <main>
-          <form hx-post="/login">
+          <form hx-ex="response-targets" hx-post="/login" hx-target-500="#server-errors" hx-target-422="#extra-information" hx-sync="this:replace">
             <div>
               <img src="/images/auth-icon.jpg" alt="A lock icon" />
             </div>
+            <div id="server-errors"></div>
             <div class="control">
               <label for="email">Email</label>
               <input 
                 hx-post="/validate" 
                 hx-target="next p"
+                hx-param="email"
                 type="email" 
                 name="email" 
                 id="email" />
@@ -44,11 +47,13 @@ app.get('/', (req, res) => {
               <input 
                 hx-post="/validate" 
                 hx-target="next p" 
+                hx-param="password"
                 type="password" 
                 name="password" 
                 id="password" />
               <p class="error"></p>
             </div>
+            <div id="extra-information"></div> 
             <p>
               <button type="submit">
                 Login
@@ -62,52 +67,56 @@ app.get('/', (req, res) => {
 });
 
 app.post('/validate', (req: any, res: any) => {
-    if ('email' in req.body && !req.body.email.includes('@')) {
-        return res.send(`
+  if ('email' in req.body && !req.body.email.includes('@')) {
+    return res.send(`
       E-Mail address is invalid.
     `);
-    } else if ('email' in req.body && req.body.email.includes('@')) {
-        return res.send();
-    } else if ('password' in req.body && req.body.password.trim().length < 8) {
-        return res.send(`
+  } else if ('email' in req.body && req.body.email.includes('@')) {
+    return res.send();
+  } else if ('password' in req.body && req.body.password.trim().length < 8) {
+    return res.send(`
       Password must be at least 8 characters long.
     `);
-    } else if ('password' in req.body && req.body.password.trim().length >= 8) {
-        return res.send();
-    }
-    res.send();
+  } else if ('password' in req.body && req.body.password.trim().length >= 8) {
+    return res.send();
+  }
+  res.send();
 });
 
 app.post('/login', (req: any, res: any) => {
-    const email = req.body.email;
-    const password = req.body.password;
+  const email = req.body.email;
+  const password = req.body.password;
 
-    let errors = {};
+  let errors: any = {};
 
-    if (!email || !email.includes('@')) {
-        errors.email = 'Please enter a valid email address.';
-    }
+  if (!email || !email.includes('@')) {
+    errors['email'] = 'Please enter a valid email address.';
+  }
 
-    if (!password || password.trim().length < 8) {
-        errors.password = 'Password must be at least 8 characters long.';
-    }
+  if (!password || password.trim().length < 8) {
+    errors['password'] = 'Password must be at least 8 characters long.';
+  }
 
-    if (Object.keys(errors).length > 0) {
-        res.send(`
-      <div id="extra-information">
+  if (Object.keys(errors).length > 0) {
+    res.status(422).send(`
         <ul id="form-errors">
           ${Object.keys(errors)
-                .map((key) => `<li>${errors[key]}</li>`)
-                .join('')}
+        .map((key) => `<li>${errors[key]}</li>`)
+        .join('')}
         </ul>
-      </div>
     `);
-    }
-    res.send();
+  }
+  if (Math.random() > 0.5) {
+    // res.setHeader('HX-Retarget', '.control');
+    //res.setHeader('HX-Reswap', 'beforebegin');
+    res.status(500).send(`<p class="error">A server error occurred.</p>`);
+  }
+  res.setHeader('HX-Redirect', '/authenticated');
+  res.send();
 });
 
 app.get('/authenticated', (req: any, res: any) => {
-    res.send(`
+  res.send(`
     <!DOCTYPE html>
     <html lang="en">
       <head>
