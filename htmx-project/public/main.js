@@ -1,3 +1,5 @@
+console.log(htmx)
+
 function showModalConfiramtion(event) {
   if (event.detail.path === '/suggested-locations') {
     return;
