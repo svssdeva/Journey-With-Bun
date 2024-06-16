@@ -16,7 +16,7 @@ app.get('/', (req: any, res: any) => {
         <link rel="stylesheet" href="/main.css">
          <script src="https://unpkg.com/htmx.org@1.9.12" integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2" crossorigin="anonymous"></script>
       </head>
-      <body>
+      <body hx-boost="true">
         <header id="main-header">
           <div id="main-title">
             <a href="/">
@@ -32,7 +32,7 @@ app.get('/', (req: any, res: any) => {
             ${PRODUCTS.map(
         (product) => `
               <article class="product">
-                <a hx-get="/products/${product.id}" hx-target="body" hx-push-url="/products/${product.id}">
+                <a href="/products/${product.id}">
                   <img src="/images/${product.image}" alt="${product.title}" />
                   <div class="product-content">
                     <h3>${product.title}</h3>
@@ -60,7 +60,7 @@ app.get('/products/:id', (req: any, res: any) => {
         <link rel="stylesheet" href="/main.css">
        <script src="https://unpkg.com/htmx.org@1.9.12" integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2" crossorigin="anonymous"></script>
       </head>
-      <body>
+      <body hx-boost="true">
         <header id="main-header">
           <div id="main-title">
             <a href="/">
@@ -87,4 +87,8 @@ app.get('/products/:id', (req: any, res: any) => {
   `);
 });
 
+app.post('/cart', (req: any, res: any) => {
+    //res.send('Added to cart');
+    res.redirect('/');
+})
 app.listen(3000);
